@@ -1,124 +1,156 @@
-1. Landing Page Module
+# BloodNet — Django
 
-The landing page is the main page of the BloodNet website.
+BloodNet includes a real signup → Gmail OTP verification → login flow.
 
-It contains:
+## Verification flow
 
-BloodNet introduction
-Request Blood button
-Become a Donor button
-Emergency help section
-Donor and blood request statistics
-How It Works section
-Login and Sign Up buttons
+1. User submits the signup form and is saved with `is_verified=False`.
+2. A 6-digit OTP is generated.
+3. Django emails the OTP to the signup email address.
+4. User enters the OTP on the verification page.
+5. A correct OTP sets `is_verified=True` and redirects to login.
+6. An unverified user who tries to log in receives a fresh OTP.
 
-The Request Blood and Become a Donor buttons currently take the user to the signup page.
+## 1. Install and prepare the project
 
-2. Navigation Module
+```bash
+python -m venv venv
+```
 
-The navigation bar allows users to move to different parts of the landing page.
+Activate the environment on Windows:
 
-It contains:
+```powershell
+venv\Scripts\activate
+```
 
-Home
-About
-How It Works
-Camps
-Login or Logout
-Sign Up
+Install the dependencies:
 
-The About link moves the user to the Emergency Help and statistics section.
+```bash
+pip install -r requirements.txt
+```
 
-The How It Works link moves the user directly to the How It Works section.
+## 2. Configure Gmail SMTP
 
-The navigation bar is also responsive, which means it can work on desktop, tablet, and mobile screens.
+Gmail requires a Google **App Password**, not your normal Gmail password.
+Enable 2-Step Verification for the sender Google account, then create an App
+Password for BloodNet.
 
-3. User Registration Module
+Copy the included example environment file:
 
-The registration module allows a new user to create an account.
+```powershell
+Copy-Item .env.example .env
+```
 
-During signup, the user enters:
+Or create a new file named `.env` beside `manage.py`.
 
-Full name
-Email address
-Password
-Confirm password
-User role
+Edit `.env` and replace the example values:
 
-The available roles are:
+```env
+DJANGO_SECRET_KEY=replace-with-a-long-random-secret-key
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
 
-Donor
-Patient
-Hospital
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_USE_SSL=False
+EMAIL_HOST_USER=yourgmail@gmail.com
+EMAIL_HOST_PASSWORD=your-16-character-google-app-password
+DEFAULT_FROM_EMAIL=BloodNet <yourgmail@gmail.com>
+```
 
-The email address must be unique. A user cannot create another account using an email address that is already registered.
+Important:
 
-4. Password Visibility Module
+- Use the 16-character Google App Password, not the Gmail account password.
+- Do not upload `.env` to GitHub. It is already included in `.gitignore`.
+- Spaces copied with the App Password are removed automatically by settings.
+- If Gmail credentials are absent, the project falls back to console email so
+  development can continue.
 
-The signup and login pages contain an eye icon beside the password fields.
+## 3. Create database tables
 
-The user can click the eye icon to:
+```bash
+python manage.py migrate
+```
 
-Show the password
-Hide the password
+Optional admin account:
 
-This feature is available for:
+```bash
+python manage.py createsuperuser
+```
 
-Password
-Confirm password
-Login password
-New password
-Confirm new password
+## 4. Test email before signup
 
-It helps users check whether they have entered the correct password.
+Replace the address with an inbox you can check:
 
-5. Email OTP Verification Module
+```bash
+python manage.py test_email receiver@gmail.com
+```
 
-After completing the signup form, the system generates a six-digit OTP code.
+A successful configuration prints:
 
-The process works as follows:
+```text
+Test email sent to receiver@gmail.com.
+```
 
-The user submits the signup form.
-The system creates the account as unverified.
-A six-digit OTP is generated.
-The OTP is sent to the user's email address.
-The user enters the OTP on the verification page.
-The system checks the OTP.
-If the OTP is correct, the account becomes verified.
-The user is redirected to the login page.
+Check Inbox, Spam and Promotions if the test is not visible immediately.
 
-The user can also request a new OTP by selecting the Resend Code option.
+## 5. Run BloodNet
 
-6. Login and Logout Module
+```bash
+python manage.py runserver
+```
 
-Verified users can log in using their email address and password.
+Open:
 
-The system checks:
+- `http://127.0.0.1:8000/`
+- `http://127.0.0.1:8000/accounts/signup/`
+- `http://127.0.0.1:8000/accounts/login/`
+- `http://127.0.0.1:8000/admin/`
 
-Whether the email and password are correct
-Whether the account is verified
+## Email configuration files
 
-If the account is not verified, the system generates and sends a new OTP.
+- `bloodnet_project/settings.py` — loads SMTP configuration from `.env`.
+- `.env.example` — safe template for your credentials.
+- `.env` — your private Gmail address and App Password; create locally.
+- `accounts/views.py` — sends styled OTP email and handles delivery errors.
+- `accounts/management/commands/test_email.py` — SMTP test command.
 
-After successful login, the user is redirected to the BloodNet landing page.
+## Troubleshooting
 
-The Logout option safely ends the user's session.
+### OTP still appears in terminal
 
-7. Forgot Password Module
+Django could not find both `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD`. Confirm
+that the file is named exactly `.env`, is beside `manage.py`, and restart
+`runserver` after saving it.
 
-The login page contains a Forgot Password option.
+### Username and Password not accepted
 
-The password reset process works as follows:
+Use a Google App Password. Do not use your normal Gmail password. Confirm that
+2-Step Verification is enabled for the sender account.
 
-The user clicks Forgot Password.
-The user enters their registered email address.
-The system sends a secure password reset link by email.
-The user opens the reset link.
-The user enters a new password.
-The user confirms the new password.
-The system updates the password.
-The user can log in with the new password.
+### Connection timed out
 
-The reset link is secure, can only be used for the correct account, and expires after a limited time.
+A firewall, VPN, hosting provider or network may be blocking SMTP port 587.
+Try another network or use a transactional email service for deployment.
 
+### Account created but email failed
 
+BloodNet now shows a clear error instead of crashing. Correct the `.env`
+settings, restart the server and select **Resend Code** on the verification page.
+
+## Forgot password flow
+
+1. Select **Forgot Password?** on the login page.
+2. Enter the email address registered with BloodNet.
+3. Django emails a secure, one-time reset link.
+4. Open the link and enter the new password twice.
+5. After success, return to login with the new password.
+
+The reset link expires after 1 hour by default. You can change this in `.env`:
+
+```env
+PASSWORD_RESET_TIMEOUT=3600
+```
+
+For local development without Gmail credentials, the reset email and link are printed in the terminal by Django's console email backend.
