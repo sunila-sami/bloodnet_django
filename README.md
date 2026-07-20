@@ -35,14 +35,6 @@ Gmail requires a Google **App Password**, not your normal Gmail password.
 Enable 2-Step Verification for the sender Google account, then create an App
 Password for BloodNet.
 
-Copy the included example environment file:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Or create a new file named `.env` beside `manage.py`.
-
 Edit `.env` and replace the example values:
 
 ```env
@@ -72,29 +64,6 @@ Important:
 ```bash
 python manage.py migrate
 ```
-
-Optional admin account:
-
-```bash
-python manage.py createsuperuser
-```
-
-## 4. Test email before signup
-
-Replace the address with an inbox you can check:
-
-```bash
-python manage.py test_email receiver@gmail.com
-```
-
-A successful configuration prints:
-
-```text
-Test email sent to receiver@gmail.com.
-```
-
-Check Inbox, Spam and Promotions if the test is not visible immediately.
-
 ## 5. Run BloodNet
 
 ```bash
