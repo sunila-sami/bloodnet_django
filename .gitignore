@@ -1,0 +1,14 @@
+# Private environment variables
+.env
+
+# Python / Django generated files
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+staticfiles/
+*.log
+
+# Local editor files
+.vscode/
+.idea/

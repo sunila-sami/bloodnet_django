@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Your Account — BloodNet</title>
+<style>
+  :root{
+    --red: #E23A2E;
+    --red-dark: #C62D22;
+    --green: #1C8A55;
+    --orange: #F0A028;
+    --cream: #FBF8F3;
+    --text-dark: #2B2F38;
+    --text-muted: #6B6F7B;
+    --card-border: #ECE8DF;
+    --input-bg: #FBFAF7;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html, body{ height:100%; overflow-x:hidden; }
+  body{
+    font-family:'Poppins','Segoe UI',Arial,sans-serif;
+    background: linear-gradient(160deg, #FFF6F5 0%, #FBF8F3 45%, #FCEAE8 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ text-decoration:none; }
+
+  .page-wrap{
+    min-height:100vh;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:40px 20px;
+    perspective:1600px;
+  }
+
+  .auth-card{
+    position:relative;
+    width:100%;
+    max-width:560px;
+    background:#fff;
+    border-radius:24px;
+    padding:56px 56px 48px;
+    overflow:hidden;
+    box-shadow: 0 20px 60px rgba(43,47,56,.08);
+    border:1px solid var(--card-border);
+    transform-style:preserve-3d;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+    animation: cardIn .6s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes cardIn{
+    from{ opacity:0; transform: translateY(30px) rotateX(8deg) scale(.97); }
+    to{ opacity:1; transform: translateY(0) rotateX(0) scale(1); }
+  }
+
+  .close-link{
+    position:absolute; top:20px; right:24px;
+    width:36px; height:36px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-muted);
+    background:rgba(0,0,0,.04);
+    font-size:1.1rem;
+    z-index:5;
+  }
+  .close-link:hover{ background:rgba(0,0,0,.08); }
+
+  .auth-content{ position:relative; z-index:1; }
+
+  .badge-icon{
+    width:64px; height:64px;
+    border-radius:50%;
+    background:rgba(226,58,46,.08);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 24px;
+  }
+  .badge-icon svg{ width:30px; height:30px; }
+
+  .auth-header{ text-align:center; margin-bottom:32px; padding-top:10px; }
+  .auth-header h1{ font-size:1.8rem; font-weight:700; color:var(--text-dark); margin-bottom:10px; }
+  .auth-header p{ font-size:1rem; font-weight:500; color:var(--text-muted); line-height:1.5; }
+  .auth-header p strong{ color:var(--text-dark); }
+
+  .otp-row{ display:flex; justify-content:center; gap:12px; margin:32px 0 10px; }
+  .otp-box{
+    width:52px; height:60px;
+    text-align:center;
+    font-size:1.6rem;
+    font-weight:700;
+    color:var(--text-dark);
+    border:1.5px solid var(--card-border);
+    border-radius:10px;
+    background:var(--input-bg);
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .otp-box:focus{ border-color:var(--red); box-shadow:0 0 0 3px rgba(226,58,46,.1); }
+
+  .error-msg{
+    text-align:center;
+    color:var(--red-dark);
+    background:rgba(226,58,46,.08);
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:.92rem;
+    font-weight:600;
+    margin-bottom:20px;
+  }
+  .success-msg{
+    text-align:center;
+    color:var(--green);
+    background:rgba(28,138,85,.08);
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:.92rem;
+    font-weight:600;
+    margin-bottom:20px;
+  }
+
+  .btn-primary{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(180deg, #F4453A 0%, var(--red) 100%);
+    color:#fff;
+    font-weight:700;
+    font-size:1.1rem;
+    cursor:pointer;
+    margin-top:10px;
+    transition:transform .15s ease, box-shadow .15s ease;
+    box-shadow:0 12px 24px rgba(226,58,46,.28);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 16px 30px rgba(226,58,46,.35); }
+  .btn-primary:active{ transform:translateY(1px) scale(.98); }
+
+  .auth-footer{
+    text-align:center;
+    padding-top:24px;
+    margin-top:28px;
+    border-top:1px solid var(--card-border);
+    color:var(--text-muted);
+    font-size:.98rem;
+  }
+  .resend-form{ display:inline; }
+  .resend-link{
+    color:var(--red);
+    font-weight:700;
+    cursor:pointer;
+    background:none;
+    border:none;
+    font-size:inherit;
+    font-family:inherit;
+    padding:0;
+  }
+
+  @media (max-width:600px){
+    .page-wrap{ padding:0; }
+    .auth-card{ border-radius:0; min-height:100vh; padding:48px 20px 32px; border:none; }
+    .otp-box{ width:44px; height:54px; font-size:1.4rem; }
+  }
+</style>
+  <link rel="stylesheet" href="{% static 'css/bloodnet-theme.css' %}">
+</head>
+<body class="page-verify">
+
+<div class="page-wrap">
+  <div class="auth-card">
+    <a href="{% url 'core:index' %}" class="close-link" aria-label="Close and return home">&times;</a>
+
+    <div class="auth-content">
+      <div class="badge-icon">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#E23A2E" stroke-width="1.8"/><path d="M3 6l9 7 9-7" stroke="#E23A2E" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="auth-header">
+        <h1>Verify Your Account</h1>
+        <p>We've sent a 6-digit verification code to<br><strong>{{ email }}</strong></p>
+      </div>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="success-msg">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      {% if error %}
+        <div class="error-msg">{{ error }}</div>
+      {% endif %}
+
+      <form id="verifyForm" method="post" novalidate>
+        {% csrf_token %}
+        <div class="otp-row">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-box" name="otp1" autocomplete="one-time-code">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-box" name="otp2">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-box" name="otp3">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-box" name="otp4">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-box" name="otp5">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-box" name="otp6">
+        </div>
+
+        <button type="submit" class="btn-primary">Verify Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Didn't receive the code?
+        <form class="resend-form" method="post" action="{% url 'accounts:resend_otp' %}">
+          {% csrf_token %}
+          <button type="submit" class="resend-link">Resend OTP</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const otpBoxes = Array.from(document.querySelectorAll('.otp-box'));
+
+  otpBoxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/[^0-9]/g, '');
+      if (box.value && i < otpBoxes.length - 1) {
+        otpBoxes[i + 1].focus();
+      }
+    });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !box.value && i > 0) {
+        otpBoxes[i - 1].focus();
+      }
+    });
+    box.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const digits = (e.clipboardData.getData('text') || '').replace(/[^0-9]/g, '').split('');
+      digits.forEach((d, idx) => { if (otpBoxes[idx]) otpBoxes[idx].value = d; });
+      const nextEmpty = otpBoxes.find(b => !b.value);
+      (nextEmpty || otpBoxes[otpBoxes.length - 1]).focus();
+    });
+  });
+
+  if (otpBoxes[0]) otpBoxes[0].focus();
+</script>
+
+</body>
+</html>
