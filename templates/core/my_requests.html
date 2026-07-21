@@ -1,0 +1,1053 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Requests - LifeStream</title>
+    
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #b11226;
+            --primary-hover: #960f20;
+            --primary-light: #fff0f0;
+            --primary-light-2: #ffe1e2;
+            --bg-color: #fff9f9;
+            --card-bg: #ffffff;
+            --text-main: #2d2325;
+            --text-muted: #7d6e71;
+            --border-color: #f3e6e8;
+            --input-bg: #fffafa;
+            --shadow-sm: 0 2px 8px rgba(177, 18, 38, 0.03);
+            --shadow-md: 0 8px 24px rgba(177, 18, 38, 0.05);
+            --green: #1a7f52;
+            --green-bg: #eef8f3;
+            --orange: #d97706;
+            --orange-bg: #fef3c7;
+            --red-urgency: #dc2626;
+            --red-urgency-bg: #fee2e2;
+            --blue: #2563eb;
+            --blue-bg: #dbeafe;
+            --gray-bg: #f3f4f6;
+            --gray-text: #4b5563;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout Structure */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background: #fffcfc;
+            border-right: 1px solid var(--border-color);
+            padding: 32px 24px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 40px;
+            text-decoration: none;
+        }
+
+        .logo-container svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--primary-light);
+            border-radius: 16px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(177, 18, 38, 0.05);
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-muted);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            fill: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-item-link.active {
+            color: var(--primary);
+            background: var(--primary-light-2);
+            font-weight: 600;
+        }
+
+        .nav-item-link.active svg {
+            stroke: var(--primary);
+        }
+
+        .logout-container {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-muted);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            fill: none;
+        }
+
+        .logout-link:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* ================= MAIN COLUMN ================= */
+        .main-wrapper {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Topbar Header */
+        .topbar {
+            height: 72px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .topbar-logo {
+            display: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-wrapper svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-muted);
+            fill: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(177, 18, 38, 0.08);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .topbar-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .topbar-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            fill: none;
+        }
+
+        .topbar-profile-pic {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        /* ================= CONTENT CONTAINER ================= */
+        .content-container {
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            flex-grow: 1;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            gap: 20px;
+        }
+
+        .page-header-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .btn-create-request {
+            background: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(177, 18, 38, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-create-request:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(177, 18, 38, 0.3);
+        }
+
+        .btn-create-request svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* ================= SUCCESS ALERTS / MESSAGES ================= */
+        .messages-container {
+            margin-bottom: 28px;
+        }
+
+        .alert-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 12px;
+        }
+
+        .alert-banner.alert-success {
+            background-color: var(--green-bg);
+            border: 1px solid rgba(26, 127, 82, 0.12);
+            color: #115335;
+        }
+
+        .alert-banner.alert-error {
+            background-color: var(--red-urgency-bg);
+            border: 1px solid rgba(220, 38, 38, 0.12);
+            color: #7f1d1d;
+        }
+
+        .alert-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-icon-wrapper svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.2;
+        }
+
+        .alert-text {
+            font-size: 14px;
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ================= EMPTY STATE ================= */
+        .empty-state {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 600px;
+            margin: 40px auto;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            margin-bottom: 24px;
+        }
+
+        .empty-icon-container svg {
+            width: 40px;
+            height: 40px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .empty-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            max-width: 380px;
+            margin-bottom: 24px;
+        }
+
+        /* ================= REQUESTS GRID ================= */
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .request-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .request-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: #ebdbe0;
+        }
+
+        /* Header of Card (Urgency + Status) */
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        /* Badges */
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Urgency Colors */
+        .badge.urgency-routine {
+            background-color: var(--green-bg);
+            color: var(--green);
+        }
+
+        .badge.urgency-urgent {
+            background-color: var(--orange-bg);
+            color: var(--orange);
+        }
+
+        .badge.urgency-emergency {
+            background-color: var(--red-urgency-bg);
+            color: var(--red-urgency);
+        }
+
+        /* Status Colors */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .status-pill.status-pending {
+            color: var(--orange);
+        }
+        .status-pill.status-matching {
+            color: var(--blue);
+        }
+        .status-pill.status-matched {
+            color: var(--green);
+        }
+        .status-pill.status-completed {
+            color: var(--green);
+        }
+        .status-pill.status-cancelled {
+            color: var(--text-muted);
+        }
+        .status-pill.status-draft {
+            color: #555555;
+            background: #e5e7eb;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .status-pill svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+        }
+
+        /* Card Content */
+        .card-content {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .component-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .component-title svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--primary);
+            stroke: var(--primary);
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .detail-row svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-muted);
+            fill: none;
+            stroke-width: 1.8;
+            flex-shrink: 0;
+        }
+
+        .detail-row span.label {
+            color: var(--text-muted);
+            width: 80px;
+            font-weight: 500;
+        }
+
+        .detail-row span.val {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Card Footer */
+        .card-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .requested-on {
+            font-weight: 500;
+        }
+
+        .card-actions-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-action-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .card-action-btn:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <a href="{% url 'core:index' %}" class="logo-container">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+            <span>LifeStream</span>
+        </a>
+
+        <!-- User Profile Card -->
+        <div class="user-profile">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120" alt="Avatar" class="user-avatar">
+            <div class="user-info">
+                <span class="user-name">{{ request.user.full_name|default:"Sarah Johnson" }}</span>
+                <span class="user-id">ID: #{{ request.user.id|default:"4432" }}</span>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <ul class="nav-menu">
+            <li>
+                <a href="{% url 'core:index' %}" class="nav-item-link">
+                    <!-- Grid icon -->
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'core:blood_request' %}" class="nav-item-link">
+                    <!-- Drop outline icon -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                    </svg>
+                    <span>Request Blood</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'core:my_requests' %}" class="nav-item-link active">
+                    <!-- Clipboard/List icon -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1" fill="none"/>
+                        <path d="M9 12h6M9 16h6"/>
+                    </svg>
+                    <span>My Requests</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item-link">
+                    <!-- Bell icon -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span>Notifications</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item-link">
+                    <!-- User icon -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item-link">
+                    <!-- Map/Tent icon -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M2 22l4-4 8 4 8-4v-16l-8 4-8-4-4 4v16zM6 18V2M14 22V6"/>
+                    </svg>
+                    <span>Blood Camps</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item-link">
+                    <!-- Chat Message icon -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>Chat with AI</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item-link">
+                    <!-- Settings Gear icon -->
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Logout Bottom -->
+        <div class="logout-container">
+            <a href="{% url 'accounts:logout' %}" class="logout-link">
+                <!-- Log out icon -->
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                </svg>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN COLUMN ================= -->
+    <div class="main-wrapper">
+
+        <!-- Topbar Header -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="#" class="topbar-logo">LifeStream</a>
+            </div>
+
+            <!-- Search box center -->
+            <div class="search-wrapper">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" class="search-input" placeholder="Search donors or facilities...">
+            </div>
+
+            <!-- Topbar Right icons -->
+            <div class="topbar-right">
+                <button class="topbar-btn" title="Help Centre">
+                    <!-- Question circle icon -->
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
+                    </svg>
+                </button>
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120" alt="Profile" class="topbar-profile-pic">
+            </div>
+        </header>
+
+        <!-- ================= CONTENT ================= -->
+        <main class="content-container">
+
+            <!-- Success/Error message displays -->
+            {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        <div class="alert-banner alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}" id="alert-message-{{ forloop.counter }}">
+                            <div class="alert-icon-wrapper">
+                                {% if message.tags == 'error' %}
+                                    <!-- Alert circle icon -->
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="12" y1="8" x2="12" y2="12"/>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Check badge icon -->
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                        <polyline points="22 4 12 14.01 9 11.01"/>
+                                    </svg>
+                                {% endif %}
+                            </div>
+                            <span class="alert-text">{{ message }}</span>
+                            <button type="button" class="alert-close" onclick="document.getElementById('alert-message-{{ forloop.counter }}').style.display='none'">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="page-header">
+                <div class="page-header-text">
+                    <h1 class="page-title">My Blood Requests</h1>
+                    <p class="page-subtitle">Track the status of your blood requests and matches.</p>
+                </div>
+                <a href="{% url 'core:blood_request' %}" class="btn-create-request">
+                    <!-- Plus sign SVG -->
+                    <svg viewBox="0 0 24 24">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    New Blood Request
+                </a>
+            </div>
+
+            <!-- List Grid -->
+            {% if requests %}
+                <div class="requests-grid">
+                    {% for req in requests %}
+                        <div class="request-card">
+                            <div class="card-header">
+                                <!-- Urgency level badge -->
+                                <span class="badge urgency-{{ req.urgency_level }}">
+                                    {{ req.get_urgency_level_display }}
+                                </span>
+                                
+                                <!-- Status badge -->
+                                <span class="status-pill status-{{ req.status }}">
+                                    {% if req.status == 'pending' %}
+                                        <!-- Hourglass -->
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M5 2h14v2c0 2-2 3-4 4v4c2 1 4 2 4 4v2H5v-2c0-2 2-3 4-4V8C7 7 5 6 5 4V2z"/>
+                                            <path d="M12 14v4M10 16h4"/>
+                                        </svg>
+                                    {% elif req.status == 'matching' %}
+                                        <!-- Pulse matching -->
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                        </svg>
+                                    {% elif req.status == 'matched' or req.status == 'completed' %}
+                                        <!-- Checked -->
+                                        <svg viewBox="0 0 24 24">
+                                            <polyline points="20 6 9 17 4 12"/>
+                                        </svg>
+                                    {% endif %}
+                                    {{ req.get_status_display }}
+                                </span>
+                            </div>
+
+                            <div class="card-content">
+                                <h3 class="component-title">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                                    </svg>
+                                    {{ req.get_blood_component_display }}
+                                </h3>
+
+                                <div class="detail-row">
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x="3" y="6" width="18" height="12" rx="2"/>
+                                        <line x1="8" y1="6" x2="8" y2="18"/>
+                                        <line x1="16" y1="6" x2="16" y2="18"/>
+                                    </svg>
+                                    <span class="label">Quantity</span>
+                                    <span class="val">{{ req.units_required }} Unit{{ req.units_required|pluralize }}</span>
+                                </div>
+
+                                <div class="detail-row">
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                    <span class="label">Required By</span>
+                                    <span class="val">{{ req.required_date|date:"N j, Y" }}</span>
+                                </div>
+
+                                <div class="detail-row">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                    <span class="label">Facility</span>
+                                    <span class="val" title="{{ req.hospital_or_blood_bank }}">{{ req.hospital_or_blood_bank }}</span>
+                                </div>
+
+                                <div class="detail-row">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M3 21h18M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M9 10h6"/>
+                                    </svg>
+                                    <span class="label">Location</span>
+                                    <span class="val">{{ req.area }}, {{ req.city }}</span>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <span class="requested-on">Requested {{ req.created_at|timesince }} ago</span>
+                                <div class="card-actions-wrapper">
+                                    <!-- Conditional Action Buttons -->
+                                    {% if req.status == 'draft' %}
+                                        <a href="{% url 'core:edit_blood_request' req.pk %}" class="card-action-btn">Edit Draft</a>
+                                        <button type="button" class="card-action-btn" onclick="confirmCancel('{% url 'core:cancel_blood_request' req.pk %}')" style="color: var(--text-muted);">Cancel</button>
+                                    {% elif req.status == 'pending' or req.status == 'matching' %}
+                                        <a href="{% url 'core:edit_blood_request' req.pk %}" class="card-action-btn">Edit</a>
+                                        <button type="button" class="card-action-btn" onclick="confirmCancel('{% url 'core:cancel_blood_request' req.pk %}')" style="color: var(--primary);">Cancel Request</button>
+                                    {% else %}
+                                        <span style="color: var(--text-muted); font-size: 11px; font-style: italic;">No actions</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1"/>
+                            <path d="M12 11v6M9 14h6"/>
+                        </svg>
+                    </div>
+                    <h3 class="empty-title">No Requests Found</h3>
+                    <p class="empty-text">You haven't created any blood requests yet. When you request blood, it will appear here.</p>
+                    <a href="{% url 'core:blood_request' %}" class="btn-create-request">
+                        <svg viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Create Blood Request
+                    </a>
+                </div>
+            {% endif %}
+
+        </main>
+    </div>
+</div>
+
+<!-- ================= POST FORM FOR CANCEL PROTECTION ================= -->
+<form id="cancel-form" method="POST" style="display: none;">
+    {% csrf_token %}
+</form>
+
+<!-- ================= JAVASCRIPT FOR CONFIRMATION ================= -->
+<script>
+    function confirmCancel(url) {
+        if (confirm("Are you sure you want to cancel this blood request?")) {
+            const form = document.getElementById("cancel-form");
+            form.action = url;
+            form.submit();
+        }
+    }
+</script>
+
+</body>
+</html>
