@@ -1,12 +1,18 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>BloodNet — Together, we make a difference.</title>
+
 <style>
-  :root{
+
+:root{
     --red: #E23A2E;
     --red-dark: #C62D22;
     --green: #1C8A55;
@@ -15,45 +21,72 @@
     --text-dark: #26241F;
     --text-muted: #6B6963;
     --card-border: #EEE9E0;
-  }
+}
 
-  *{ box-sizing:border-box; margin:0; padding:0; }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-  html{ scroll-behavior:smooth; }
-  html, body{ overflow-x:hidden; }
+html{
+    scroll-behavior:smooth;
+}
 
-  body{
-    font-family: 'Poppins','Segoe UI',Arial,sans-serif;
-    background: linear-gradient(160deg, #FFF6F5 0%, #FBF8F3 45%, #FCEAE8 100%);
-    background-attachment: fixed;
+html,
+body{
+    overflow-x:hidden;
+}
+
+body{
+    font-family:'Poppins','Segoe UI',Arial,sans-serif;
+    background:linear-gradient(
+        160deg,
+        #FFF6F5 0%,
+        #FBF8F3 45%,
+        #FCEAE8 100%
+    );
+    background-attachment:fixed;
     color:var(--text-dark);
     -webkit-font-smoothing:antialiased;
-  }
+}
 
-  a{ text-decoration:none; color:inherit; }
+a{
+    text-decoration:none;
+    color:inherit;
+}
 
-  img, svg{ display:block; max-width:100%; }
+img,
+svg{
+    display:block;
+    max-width:100%;
+}
 
-  /* ---------- Header ---------- */
-  header{
+
+/* ================= HEADER ================= */
+
+header{
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:24px 64px;
     max-width:1440px;
     margin:0 auto;
-  }
+}
 
-  .logo{
+.logo{
     display:flex;
     align-items:center;
     gap:8px;
     font-size:1.4rem;
     font-weight:700;
-  }
-  .logo .drop{ font-size:1.3rem; }
+}
 
-  .nav-toggle{
+.logo .drop{
+    font-size:1.3rem;
+}
+
+.nav-toggle{
     display:none;
     background:none;
     border:none;
@@ -61,53 +94,60 @@
     padding:8px;
     flex-direction:column;
     gap:5px;
-  }
-  .nav-toggle span{
-    width:24px; height:2px;
+}
+
+.nav-toggle span{
+    width:24px;
+    height:2px;
     background:var(--text-dark);
     border-radius:2px;
-    transition:transform .2s ease, opacity .2s ease;
-  }
+}
 
-  nav{
+nav{
     display:flex;
     gap:40px;
-  }
-  nav a{
+}
+
+nav a{
     color:var(--text-dark);
     font-size:1rem;
     position:relative;
     padding:6px 2px 8px;
     transition:color .2s ease, transform .2s ease;
-  }
-  nav a::after{
+}
+
+nav a::after{
     content:"";
     position:absolute;
-    left:0; right:0; bottom:0;
+    left:0;
+    right:0;
+    bottom:0;
     height:2px;
     background:var(--red);
     border-radius:2px;
     transform:scaleX(0);
-    transform-origin:center;
     transition:transform .22s ease;
-  }
-  nav a:hover,
-  nav a:focus-visible{
+}
+
+nav a:hover,
+nav a:focus-visible{
     color:var(--red);
     transform:translateY(-2px);
     outline:none;
-  }
-  nav a:hover::after,
-  nav a:focus-visible::after,
-  nav a.active::after{
+}
+
+nav a:hover::after,
+nav a:focus-visible::after,
+nav a.active::after{
     transform:scaleX(1);
-  }
-  nav a.active{
+}
+
+nav a.active{
     color:var(--red);
     font-weight:600;
-  }
+}
 
-  .signup-btn{
+.signup-btn{
     background:var(--red);
     color:#fff;
     padding:14px 28px;
@@ -117,14 +157,23 @@
     cursor:pointer;
     transition:transform .15s ease, box-shadow .15s ease;
     white-space:nowrap;
-  }
-  .signup-btn:hover{
+}
+
+.signup-btn:hover{
     transform:translateY(-2px);
     box-shadow:0 8px 20px rgba(226,58,46,.35);
-  }
+}
 
-  /* ---------- Hero ---------- */
-  .hero{
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+
+/* ================= HERO ================= */
+
+.hero{
     max-width:1440px;
     margin:0 auto;
     padding:40px 64px 0;
@@ -132,33 +181,36 @@
     grid-template-columns:1fr 1fr;
     gap:40px;
     align-items:center;
-  }
+}
 
-  .hero-copy h1{
+.hero-copy h1{
     font-size:clamp(2.2rem, 5vw, 4rem);
     line-height:1.05;
     font-weight:700;
     color:var(--green);
     letter-spacing:-1px;
-  }
-  .hero-copy h1 .accent{ color:var(--orange); }
+}
 
-  .hero-copy p{
+.hero-copy h1 .accent{
+    color:var(--orange);
+}
+
+.hero-copy p{
     margin-top:24px;
     font-size:clamp(1rem, 1.3vw, 1.15rem);
     color:var(--text-muted);
     max-width:460px;
     line-height:1.6;
-  }
+}
 
-  .hero-actions{
+.hero-actions{
     display:flex;
     flex-wrap:wrap;
     gap:16px;
     margin-top:32px;
-  }
+}
 
-  .btn{
+.btn{
     padding:16px 30px;
     border-radius:8px;
     font-weight:600;
@@ -166,76 +218,79 @@
     cursor:pointer;
     transition:transform .15s ease, box-shadow .15s ease;
     display:inline-block;
-  }
-  .btn-solid{
+}
+
+.btn-solid{
     background:var(--red);
     color:#fff;
     border:2px solid var(--red);
-  }
-  .btn-solid:hover{
+}
+
+.btn-solid:hover{
     transform:translateY(-2px);
     box-shadow:0 8px 20px rgba(226,58,46,.35);
-  }
-  .btn-solid:active, .btn-outline:active, .signup-btn:active{
-    transform:translateY(1px) scale(.98);
-  }
-  .btn-outline{
+}
+
+.btn-outline{
     background:transparent;
     color:var(--red);
     border:2px solid var(--red);
-  }
-  .btn-outline:hover{
+}
+
+.btn-outline:hover{
     background:rgba(226,58,46,.06);
     transform:translateY(-2px);
-  }
+}
 
-  /* Hero illustration */
-  .hero-art{
+
+/* ================= HERO IMAGE ================= */
+
+.hero-art{
     position:relative;
     display:flex;
     justify-content:center;
     align-items:center;
     min-height:280px;
     perspective:1400px;
-  }
-  .hero-art .decor-hearts{
+}
+
+.hero-art .decor-hearts{
     position:absolute;
     inset:0;
     width:100%;
     height:100%;
     z-index:0;
     pointer-events:none;
-  }
-  .hero-art-float{
+}
+
+.hero-art-float{
     position:relative;
     z-index:1;
     width:100%;
     max-width:600px;
-    animation: heroFloat 5s ease-in-out infinite;
-  }
-  .hero-art img{
+}
+
+.hero-art img{
     width:100%;
     height:auto;
     border-radius:12px;
     display:block;
-    transform-style:preserve-3d;
-    transition: transform .25s ease-out, box-shadow .25s ease-out;
-    box-shadow:none;
-    will-change: transform;
+    transition:transform .25s ease-out;
     background:transparent;
-    mix-blend-mode:normal;
-  }
-  @keyframes heroFloat{
-    0%, 100%{ transform: translateY(0); }
-    50%{ transform: translateY(-14px); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .hero-art-float{ animation:none; }
-    .hero-art img{ transition:none; }
-  }
+}
 
-  /* ---------- Emergency + Stats row ---------- */
-  .info-row{
+@media (prefers-reduced-motion: reduce){
+
+    .hero-art img{
+        transition:none;
+    }
+
+}
+
+
+/* ================= INFO ROW ================= */
+
+.info-row{
     max-width:1440px;
     margin:56px auto 0;
     padding:0 64px;
@@ -243,9 +298,9 @@
     grid-template-columns:1fr 1.6fr;
     gap:32px;
     align-items:stretch;
-  }
+}
 
-  .emergency-card{
+.emergency-card{
     background:var(--red);
     color:#fff;
     border-radius:14px;
@@ -255,17 +310,22 @@
     gap:24px;
     position:relative;
     overflow:hidden;
-  }
-  .emergency-card::before{
+}
+
+.emergency-card::before{
     content:"";
     position:absolute;
-    right:-40px; top:-40px;
-    width:160px; height:160px;
+    right:-40px;
+    top:-40px;
+    width:160px;
+    height:160px;
     background:rgba(255,255,255,.08);
     border-radius:50%;
-  }
-  .phone-badge{
-    width:64px; height:64px;
+}
+
+.phone-badge{
+    width:64px;
+    height:64px;
     background:#fff;
     border-radius:50%;
     display:flex;
@@ -273,12 +333,29 @@
     justify-content:center;
     flex-shrink:0;
     z-index:1;
-  }
-  .phone-badge svg{ width:28px; height:28px; }
-  .emergency-text{ z-index:1; }
-  .emergency-text h3{ font-size:1.3rem; margin-bottom:6px; }
-  .emergency-text p{ font-size:.95rem; opacity:.9; margin-bottom:16px; }
-  .call-btn{
+}
+
+.phone-badge svg{
+    width:28px;
+    height:28px;
+}
+
+.emergency-text{
+    z-index:1;
+}
+
+.emergency-text h3{
+    font-size:1.3rem;
+    margin-bottom:6px;
+}
+
+.emergency-text p{
+    font-size:.95rem;
+    opacity:.9;
+    margin-bottom:16px;
+}
+
+.call-btn{
     background:#fff;
     color:var(--red);
     border:none;
@@ -286,9 +363,9 @@
     border-radius:8px;
     font-weight:700;
     cursor:pointer;
-  }
+}
 
-  .stats-card{
+.stats-card{
     background:#fff;
     border:1px solid var(--card-border);
     border-radius:14px;
@@ -297,59 +374,74 @@
     justify-content:space-between;
     align-items:center;
     box-shadow:0 10px 30px rgba(0,0,0,.04);
-  }
-  .stat{
+}
+
+.stat{
     display:flex;
     align-items:center;
     gap:14px;
-  }
-  .stat-icon{
-    width:44px; height:44px;
+}
+
+.stat-icon{
+    width:44px;
+    height:44px;
     border-radius:50%;
     background:rgba(226,58,46,.08);
     display:flex;
     align-items:center;
     justify-content:center;
     flex-shrink:0;
-    transition: transform .25s ease, box-shadow .25s ease;
-  }
-  .stat:hover .stat-icon{
-    transform: translateY(-4px) scale(1.08);
-    box-shadow:0 10px 18px rgba(226,58,46,.18);
-  }
-  .stat-icon svg{ width:22px; height:22px; }
-  .stat-num{ font-size:1.4rem; font-weight:700; }
-  .stat-label{ font-size:.85rem; color:var(--text-muted); }
+}
 
-  /* ---------- How it works ---------- */
-  .how{
+.stat-icon svg{
+    width:22px;
+    height:22px;
+}
+
+.stat-num{
+    font-size:1.4rem;
+    font-weight:700;
+}
+
+.stat-label{
+    font-size:.85rem;
+    color:var(--text-muted);
+}
+
+
+/* ================= HOW IT WORKS ================= */
+
+.how{
     max-width:1200px;
     margin:110px auto 100px;
     padding:0 64px;
     text-align:center;
-    perspective:1000px;
-  }
-  .how h2{
+}
+
+.how h2{
     font-size:clamp(1.6rem, 3vw, 2.1rem);
     font-weight:600;
     margin-bottom:64px;
-  }
+}
 
-  .steps{
+.steps{
     display:flex;
     justify-content:space-between;
     align-items:flex-start;
     position:relative;
-  }
-  .step{
+}
+
+.step{
     flex:1;
     display:flex;
     flex-direction:column;
     align-items:center;
     position:relative;
-  }
-  .step-icon{
-    width:88px; height:88px;
+}
+
+.step-icon{
+    width:88px;
+    height:88px;
     border-radius:50%;
     border:1px solid var(--card-border);
     background:#fff;
@@ -360,18 +452,26 @@
     box-shadow:0 6px 20px rgba(0,0,0,.04);
     position:relative;
     z-index:2;
-    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
-  }
-  .step:hover .step-icon{
-    transform: translateY(-6px) rotateX(10deg) scale(1.06);
-    box-shadow:0 16px 26px rgba(0,0,0,.1);
-  }
-  .step-icon svg{ width:34px; height:34px; }
-  .step h4{ font-size:1.1rem; margin-bottom:8px; }
-  .step.active h4{ color:var(--text-dark); }
-  .step p{ font-size:.9rem; color:var(--text-muted); max-width:170px; line-height:1.5; }
+}
 
-  .step-connector{
+.step-icon svg{
+    width:34px;
+    height:34px;
+}
+
+.step h4{
+    font-size:1.1rem;
+    margin-bottom:8px;
+}
+
+.step p{
+    font-size:.9rem;
+    color:var(--text-muted);
+    max-width:170px;
+    line-height:1.5;
+}
+
+.step-connector{
     position:absolute;
     top:44px;
     left:calc(12.5% + 44px);
@@ -379,227 +479,877 @@
     height:0;
     border-top:2px dashed var(--card-border);
     z-index:1;
-  }
+}
 
-  .header-actions{
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
 
-  /* ---------- Responsive ---------- */
+/* ================= RESPONSIVE ================= */
 
-  /* Tablet: hero stacks, spacing tightens, hamburger appears */
-  @media (max-width: 900px){
-    header{ padding:18px 24px; position:relative; }
-    .nav-toggle{ display:flex; }
+@media (max-width:900px){
+
+    header{
+        padding:18px 24px;
+        position:relative;
+    }
+
+    .nav-toggle{
+        display:flex;
+    }
 
     nav{
-      position:absolute;
-      top:100%;
-      left:0;
-      right:0;
-      background:#fff;
-      flex-direction:column;
-      align-items:center;
-      gap:20px;
-      padding:24px 0;
-      border-bottom:1px solid var(--card-border);
-      box-shadow:0 12px 24px rgba(0,0,0,.06);
-      max-height:0;
-      overflow:hidden;
-      opacity:0;
-      transition:max-height .25s ease, opacity .2s ease, padding .25s ease;
-      z-index:50;
+        position:absolute;
+        top:100%;
+        left:0;
+        right:0;
+        background:#fff;
+        flex-direction:column;
+        align-items:center;
+        gap:20px;
+        padding:24px 0;
+        border-bottom:1px solid var(--card-border);
+        box-shadow:0 12px 24px rgba(0,0,0,.06);
+        max-height:0;
+        overflow:hidden;
+        opacity:0;
+        transition:max-height .25s ease, opacity .2s ease;
+        z-index:50;
     }
+
     nav.open{
-      max-height:360px;
-      opacity:1;
-      padding:24px 0;
+        max-height:360px;
+        opacity:1;
     }
 
-    .hero{ grid-template-columns:1fr; padding:32px 24px 0; gap:32px; }
-    .hero-art{ order:-1; }
-    .hero-copy p{ max-width:100%; }
+    .hero{
+        grid-template-columns:1fr;
+        padding:32px 24px 0;
+        gap:32px;
+    }
 
-    .info-row{ grid-template-columns:1fr; padding:0 24px; margin-top:40px; gap:20px; }
-    .stats-card{ flex-wrap:wrap; gap:24px 32px; justify-content:flex-start; }
+    .hero-art{
+        order:-1;
+    }
 
-    .how{ padding:0 24px; margin:80px auto; }
-    .steps{ flex-direction:column; gap:36px; align-items:center; }
-    .step-connector{ display:none; }
-    .step p{ max-width:260px; }
-  }
+    .hero-copy p{
+        max-width:100%;
+    }
 
-  /* Small phones: tighten paddings, single-column stats, full-width buttons */
-  @media (max-width: 480px){
-    header{ padding:16px; }
-    .logo{ font-size:1.2rem; }
+    .info-row{
+        grid-template-columns:1fr;
+        padding:0 24px;
+        margin-top:40px;
+        gap:20px;
+    }
 
-    .hero{ padding:24px 16px 0; }
-    .hero-copy h1{ letter-spacing:-0.5px; }
-    .hero-actions{ flex-direction:column; }
-    .hero-actions .btn{ width:100%; text-align:center; }
+    .stats-card{
+        flex-wrap:wrap;
+        gap:24px 32px;
+        justify-content:flex-start;
+    }
 
-    .info-row{ padding:0 16px; margin-top:32px; }
-    .emergency-card{ flex-direction:column; align-items:flex-start; padding:24px; text-align:left; }
-    .stats-card{ padding:24px; flex-direction:column; align-items:flex-start; gap:20px; }
+    .how{
+        padding:0 24px;
+        margin:80px auto;
+    }
 
-    .how{ padding:0 16px; margin:64px auto; }
-    .how h2{ font-size:1.6rem; margin-bottom:44px; }
-  }
+    .steps{
+        flex-direction:column;
+        gap:36px;
+        align-items:center;
+    }
+
+    .step-connector{
+        display:none;
+    }
+
+    .step p{
+        max-width:260px;
+    }
+
+}
+
+
+@media (max-width:480px){
+
+    header{
+        padding:16px;
+    }
+
+    .logo{
+        font-size:1.2rem;
+    }
+
+    .hero{
+        padding:24px 16px 0;
+    }
+
+    .hero-copy h1{
+        letter-spacing:-0.5px;
+    }
+
+    .hero-actions{
+        flex-direction:column;
+    }
+
+    .hero-actions .btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .info-row{
+        padding:0 16px;
+        margin-top:32px;
+    }
+
+    .emergency-card{
+        flex-direction:column;
+        align-items:flex-start;
+        padding:24px;
+        text-align:left;
+    }
+
+    .stats-card{
+        padding:24px;
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .how{
+        padding:0 16px;
+        margin:64px auto;
+    }
+
+    .how h2{
+        font-size:1.6rem;
+        margin-bottom:44px;
+    }
+
+}
+
 </style>
-  <link rel="stylesheet" href="{% static 'css/bloodnet-theme.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/bloodnet-theme.css' %}">
+
 </head>
+
+
 <body class="page-home">
 
+
+<!-- ================= HEADER ================= -->
+
 <header>
-  <div class="logo">
-    <span class="drop">🩸</span>
-    <span>BloodNet</span>
-  </div>
-  <nav id="siteNav">
-    <a href="#home" class="active">Home</a>
-    <a href="#about">About</a>
-    <a href="#how-it-works">How it Works</a>
-    <a href="#">Camps</a>
-    {% if user.is_authenticated %}
-    <a href="{% url 'accounts:logout' %}">Logout</a>
-    {% else %}
-    <a href="{% url 'accounts:login' %}">Login</a>
-    {% endif %}
-  </nav>
-  <div class="header-actions">
-    {% if not user.is_authenticated %}
-    <a href="{% url 'accounts:signup' %}" class="signup-btn" style="display:inline-block; text-align:center;">Sign Up</a>
-    {% endif %}
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNav">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+
+    <div class="logo">
+
+        <span class="drop">🩸</span>
+
+        <span>BloodNet</span>
+
+    </div>
+
+
+    <nav id="siteNav">
+
+        <a href="#home" class="active">
+            Home
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+        <a href="#how-it-works">
+            How it Works
+        </a>
+
+        <a href="#">
+            Camps
+        </a>
+
+
+        {% if user.is_authenticated %}
+
+            <a href="{% url 'accounts:logout' %}">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'accounts:login' %}">
+                Login
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+
+    <div class="header-actions">
+
+        {% if not user.is_authenticated %}
+
+            <a
+                href="{% url 'accounts:signup' %}"
+                class="signup-btn"
+            >
+                Sign Up
+            </a>
+
+        {% endif %}
+
+
+        <button
+            class="nav-toggle"
+            id="navToggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="siteNav"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
 </header>
 
+
+
+<!-- ================= HERO ================= -->
+
 <section class="hero" id="home">
-  <div class="hero-copy">
-    <h1>Together,<br><span class="accent">we</span> make a<br>difference.</h1>
-    <p>Smart Blood Donation Network connects donors with those who need it most.</p>
-    <div class="hero-actions">
-      <a class="btn btn-solid" href="{% url 'accounts:signup' %}">Request Blood</a>
-      <a class="btn btn-outline" href="{% url 'accounts:signup' %}">Become a Donor</a>
-    </div>
-  </div>
 
-  <div class="hero-art">
-    <svg class="decor-hearts" viewBox="0 0 600 520" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-      <path d="M550 90 c-8-11-24-11-30 3-6-14-22-14-30-3-8 11 0 25 30 42 30-17 38-31 30-42Z" fill="#F2846E" opacity="0.55"/>
-      <path d="M40 60 c-6-8-18-8-22 2-4-10-16-10-22-2-6 8 0 18 22 30 22-12 28-22 22-30Z" fill="#F2846E" opacity="0.5"/>
-      <path d="M30 330 c-5-7-16-7-19 2-3-9-14-9-19-2-5 7 0 16 19 27 19-11 24-20 19-27Z" fill="#F2846E" opacity="0.45"/>
-      <path d="M580 300 c-5-7-16-7-19 2-3-9-14-9-19-2-5 7 0 16 19 27 19-11 24-20 19-27Z" fill="#F2846E" opacity="0.5"/>
-      <circle cx="580" cy="40" r="4" fill="#F0A028" opacity="0.6"/>
-      <circle cx="15" cy="140" r="3" fill="#F0A028" opacity="0.5"/>
-    </svg>
-    <div class="hero-art-float" id="heroFloat">
-      <img id="heroImg" src="{% static 'assets/hero-peoplet.png' %}" alt="A diverse group of smiling people raising their fists in solidarity, in front of a large heart shape, representing BloodNet's community of donors">
+
+    <div class="hero-copy">
+
+
+        <h1>
+
+            Together,
+
+            <br>
+
+            <span class="accent">we</span>
+
+            make a
+
+            <br>
+
+            difference.
+
+        </h1>
+
+
+        <p>
+
+            Smart Blood Donation Network connects
+            donors with those who need it most.
+
+        </p>
+
+
+        <!-- ================= FIXED BUTTONS ================= -->
+
+        <div class="hero-actions">
+
+
+            {% if user.is_authenticated %}
+
+                <!-- Logged-in user -->
+                <a
+                    class="btn btn-solid"
+                    href="{% url 'core:blood_request' %}"
+                >
+                    Request Blood
+                </a>
+
+            {% else %}
+
+                <!-- Guest user -->
+                <a
+                    class="btn btn-solid"
+                    href="{% url 'accounts:signup' %}"
+                >
+                    Request Blood
+                </a>
+
+            {% endif %}
+
+
+
+            {% if user.is_authenticated %}
+
+                <a
+                    class="btn btn-outline"
+                    href="#"
+                >
+                    Become a Donor
+                </a>
+
+            {% else %}
+
+                <a
+                    class="btn btn-outline"
+                    href="{% url 'accounts:signup' %}"
+                >
+                    Become a Donor
+                </a>
+
+            {% endif %}
+
+
+        </div>
+
     </div>
-  </div>
+
+
+
+    <!-- ================= HERO IMAGE ================= -->
+
+    <div class="hero-art">
+
+
+        <svg
+            class="decor-hearts"
+            viewBox="0 0 600 520"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid meet"
+        >
+
+            <path
+                d="M550 90 c-8-11-24-11-30 3-6-14-22-14-30-3-8 11 0 25 30 42 30-17 38-31 30-42Z"
+                fill="#F2846E"
+                opacity="0.55"
+            />
+
+            <path
+                d="M40 60 c-6-8-18-8-22 2-4-10-16-10-22-2-6 8 0 18 22 30 22-12 28-22 22-30Z"
+                fill="#F2846E"
+                opacity="0.5"
+            />
+
+            <path
+                d="M30 330 c-5-7-16-7-19 2-3-9-14-9-19-2-5 7 0 16 19 27 19-11 24-20 19-27Z"
+                fill="#F2846E"
+                opacity="0.45"
+            />
+
+            <path
+                d="M580 300 c-5-7-16-7-19 2-3-9-14-9-19-2-5 7 0 16 19 27 19-11 24-20 19-27Z"
+                fill="#F2846E"
+                opacity="0.5"
+            />
+
+            <circle
+                cx="580"
+                cy="40"
+                r="4"
+                fill="#F0A028"
+                opacity="0.6"
+            />
+
+            <circle
+                cx="15"
+                cy="140"
+                r="3"
+                fill="#F0A028"
+                opacity="0.5"
+            />
+
+        </svg>
+
+
+        <div
+            class="hero-art-float"
+            id="heroFloat"
+        >
+
+            <img
+                id="heroImg"
+                src="{% static 'assets/hero-peoplet.png' %}"
+                alt="BloodNet community of donors"
+            >
+
+        </div>
+
+    </div>
+
 </section>
 
-<section class="info-row" id="about">
-  <div class="emergency-card">
-    <div class="phone-badge">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 5 5L15 12l5 2v3a2 2 0 0 1-2 2C10.5 19 5 13.5 5 6a2 2 0 0 1 1-3Z" fill="#E23A2E"/></svg>
-    </div>
-    <div class="emergency-text">
-      <h3>Emergency? Need Blood Now?</h3>
-      <p>We are here 24/7 for immediate help.</p>
-      <button class="call-btn">Call Emergency</button>
-    </div>
-  </div>
 
-  <div class="stats-card">
-    <div class="stat">
-      <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 0a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM8 14c-4 0-6 2-6 4v2h12v-2c0-2-2-4-6-4Zm8 0c-.5 0-1 .03-1.5.1 1 .9 1.5 2 1.5 3.4v2.5h6v-2c0-2-2.6-4-6-4Z" fill="#E23A2E"/></svg></div>
-      <div><div class="stat-num">12,458+</div><div class="stat-label">Donors</div></div>
+
+<!-- ================= INFO ROW ================= -->
+
+<section
+    class="info-row"
+    id="about"
+>
+
+
+    <div class="emergency-card">
+
+
+        <div class="phone-badge">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+            >
+
+                <path
+                    d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 5 5L15 12l5 2v3a2 2 0 0 1-2 2C10.5 19 5 13.5 5 6a2 2 0 0 1 1-3Z"
+                    fill="#E23A2E"
+                />
+
+            </svg>
+
+        </div>
+
+
+        <div class="emergency-text">
+
+            <h3>
+                Emergency? Need Blood Now?
+            </h3>
+
+            <p>
+                We are here 24/7 for immediate help.
+            </p>
+
+            <button class="call-btn">
+                Call Emergency
+            </button>
+
+        </div>
+
     </div>
-    <div class="stat">
-      <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z" fill="#E23A2E"/></svg></div>
-      <div><div class="stat-num">8,742+</div><div class="stat-label">Requests</div></div>
+
+
+
+    <div class="stats-card">
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path
+                        d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 0a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM8 14c-4 0-6 2-6 4v2h12v-2c0-2-2-4-6-4Zm8 0c-.5 0-1 .03-1.5.1 1 .9 1.5 2 1.5 3.4v2.5h6v-2c0-2-2.6-4-6-4Z"
+                        fill="#E23A2E"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <div class="stat-num">
+                    12,458+
+                </div>
+
+                <div class="stat-label">
+                    Donors
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path
+                        d="M12 2s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11Z"
+                        fill="#E23A2E"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <div class="stat-num">
+                    8,742+
+                </div>
+
+                <div class="stat-label">
+                    Requests
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path
+                        d="M12 21s-7-4.4-9.7-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.7 6C19 16.6 12 21 12 21Z"
+                        fill="#E23A2E"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <div class="stat-num">
+                    25,318+
+                </div>
+
+                <div class="stat-label">
+                    Lives Saved
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <rect
+                        x="7"
+                        y="2"
+                        width="10"
+                        height="20"
+                        rx="2"
+                        fill="#E23A2E"
+                    />
+
+                    <rect
+                        x="10"
+                        y="6"
+                        width="4"
+                        height="4"
+                        fill="#fff"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <div class="stat-num">
+                    120+
+                </div>
+
+                <div class="stat-label">
+                    Camps
+                </div>
+
+            </div>
+
+        </div>
+
+
     </div>
-    <div class="stat">
-      <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-9.7-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.7 6C19 16.6 12 21 12 21Z" fill="#E23A2E"/></svg></div>
-      <div><div class="stat-num">25,318+</div><div class="stat-label">Lives Saved</div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" fill="#E23A2E"/><rect x="10" y="6" width="4" height="4" fill="#fff"/></svg></div>
-      <div><div class="stat-num">120+</div><div class="stat-label">Camps</div></div>
-    </div>
-  </div>
+
 </section>
 
-<section class="how" id="how-it-works">
-  <h2>How it Works</h2>
-  <div class="steps">
-    <div class="step-connector"></div>
-    <div class="step">
-      <div class="step-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="6" y="3" width="12" height="18" rx="2" stroke="#E23A2E" stroke-width="1.6"/><circle cx="12" cy="12" r="1.6" fill="#E23A2E"/></svg></div>
-      <h4>Request</h4>
-      <p>Submit your blood requirement</p>
+
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section
+    class="how"
+    id="how-it-works"
+>
+
+
+    <h2>
+        How it Works
+    </h2>
+
+
+    <div class="steps">
+
+
+        <div class="step-connector"></div>
+
+
+        <div class="step">
+
+            <div class="step-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <rect
+                        x="6"
+                        y="3"
+                        width="12"
+                        height="18"
+                        rx="2"
+                        stroke="#E23A2E"
+                        stroke-width="1.6"
+                    />
+
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="1.6"
+                        fill="#E23A2E"
+                    />
+
+                </svg>
+
+            </div>
+
+            <h4>
+                Request
+            </h4>
+
+            <p>
+                Submit your blood requirement
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="6"
+                        stroke="#E23A2E"
+                        stroke-width="1.6"
+                    />
+
+                    <line
+                        x1="16"
+                        y1="16"
+                        x2="21"
+                        y2="21"
+                        stroke="#E23A2E"
+                        stroke-width="1.6"
+                    />
+
+                </svg>
+
+            </div>
+
+            <h4>
+                Match
+            </h4>
+
+            <p>
+                We find matching donors
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path
+                        d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 5 5L15 12l5 2v3a2 2 0 0 1-2 2C10.5 19 5 13.5 5 6a2 2 0 0 1 1-3Z"
+                        stroke="#E23A2E"
+                        stroke-width="1.4"
+                        fill="none"
+                    />
+
+                </svg>
+
+            </div>
+
+            <h4>
+                Connect
+            </h4>
+
+            <p>
+                Connect with donors instantly
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path
+                        d="M12 21s-7-4.4-9.7-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.7 6C19 16.6 12 21 12 21Z"
+                        stroke="#E23A2E"
+                        stroke-width="1.6"
+                    />
+
+                </svg>
+
+            </div>
+
+            <h4>
+                Save Lives
+            </h4>
+
+            <p>
+                Your help can save a life
+            </p>
+
+        </div>
+
+
     </div>
-    <div class="step">
-      <div class="step-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6" stroke="#E23A2E" stroke-width="1.6"/><line x1="16" y1="16" x2="21" y2="21" stroke="#E23A2E" stroke-width="1.6"/></svg></div>
-      <h4>Match</h4>
-      <p>We find matching donors</p>
-    </div>
-    <div class="step">
-      <div class="step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 5 5L15 12l5 2v3a2 2 0 0 1-2 2C10.5 19 5 13.5 5 6a2 2 0 0 1 1-3Z" stroke="#E23A2E" stroke-width="1.4" fill="none"/></svg></div>
-      <h4>Connect</h4>
-      <p>Connect with donors instantly</p>
-    </div>
-    <div class="step">
-      <div class="step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-9.7-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.7 6C19 16.6 12 21 12 21Z" stroke="#E23A2E" stroke-width="1.6"/></svg></div>
-      <h4>Save Lives</h4>
-      <p>Your help can save a life</p>
-    </div>
-  </div>
+
 </section>
+
+
+
+<!-- ================= JAVASCRIPT ================= -->
 
 <script>
-  const navToggle = document.getElementById('navToggle');
-  const siteNav = document.getElementById('siteNav');
 
-  navToggle.addEventListener('click', () => {
-    const isOpen = siteNav.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', isOpen);
-  });
+const navToggle = document.getElementById('navToggle');
 
-  siteNav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      siteNav.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
+const siteNav = document.getElementById('siteNav');
 
-      if (link.getAttribute('href').startsWith('#') && link.getAttribute('href').length > 1) {
-        siteNav.querySelectorAll('a').forEach(item => item.classList.remove('active'));
-        link.classList.add('active');
-      }
+
+if (navToggle && siteNav) {
+
+    navToggle.addEventListener('click', () => {
+
+        const isOpen =
+            siteNav.classList.toggle('open');
+
+        navToggle.setAttribute(
+            'aria-expanded',
+            isOpen
+        );
+
     });
-  });
 
-  // Live 3D tilt on the hero image, follows the cursor
-  const heroFloat = document.getElementById('heroFloat');
-  const heroImg = document.getElementById('heroImg');
-  if (heroFloat && heroImg) {
-    heroFloat.addEventListener('mousemove', (e) => {
-      const rect = heroImg.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      const rotateY = x * 14;
-      const rotateX = -y * 14;
-      heroImg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+
+    siteNav.querySelectorAll('a').forEach(link => {
+
+        link.addEventListener('click', () => {
+
+            siteNav.classList.remove('open');
+
+            navToggle.setAttribute(
+                'aria-expanded',
+                'false'
+            );
+
+            const href =
+                link.getAttribute('href');
+
+            if (
+                href &&
+                href.startsWith('#') &&
+                href.length > 1
+            ) {
+
+                siteNav
+                    .querySelectorAll('a')
+                    .forEach(item =>
+                        item.classList.remove('active')
+                    );
+
+                link.classList.add('active');
+
+            }
+
+        });
+
     });
-    heroFloat.addEventListener('mouseleave', () => {
-      heroImg.style.transform = 'rotateX(0) rotateY(0) scale(1)';
-    });
-  }
+
+}
+
+
+/* ================= HERO IMAGE TILT ================= */
+
+const heroFloat =
+    document.getElementById('heroFloat');
+
+const heroImg =
+    document.getElementById('heroImg');
+
+
+if (heroFloat && heroImg) {
+
+    heroFloat.addEventListener(
+        'mousemove',
+        (e) => {
+
+            const rect =
+                heroImg.getBoundingClientRect();
+
+            const x =
+                (e.clientX - rect.left)
+                / rect.width - 0.5;
+
+            const y =
+                (e.clientY - rect.top)
+                / rect.height - 0.5;
+
+            const rotateY =
+                x * 14;
+
+            const rotateX =
+                -y * 14;
+
+            heroImg.style.transform =
+                `rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 scale(1.02)`;
+
+        }
+    );
+
+
+    heroFloat.addEventListener(
+        'mouseleave',
+        () => {
+
+            heroImg.style.transform =
+                'rotateX(0) rotateY(0) scale(1)';
+
+        }
+    );
+
+}
+
 </script>
+
+
 </body>
+
 </html>

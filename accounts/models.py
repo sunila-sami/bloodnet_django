@@ -31,10 +31,28 @@ class User(AbstractUser):
         ("rejected", "Rejected"),
     )
 
+    BLOOD_GROUP_CHOICES = (
+        ("A+", "A+"),
+        ("A-", "A-"),
+        ("B+", "B+"),
+        ("B-", "B-"),
+        ("AB+", "AB+"),
+        ("AB-", "AB-"),
+        ("O+", "O+"),
+        ("O-", "O-"),
+    )
+
     username = None
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=150, blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="donor")
+    blood_group = models.CharField(
+        max_length=5,
+        choices=BLOOD_GROUP_CHOICES,
+        default="A+",
+        blank=True,
+        null=True,
+    )
 
     # ---- Stage 1: email/phone OTP verification ----
     is_verified = models.BooleanField(default=False)

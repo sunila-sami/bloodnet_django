@@ -1,7 +1,3 @@
-"""
-Django settings for the BloodNet project.
-"""
-
 import os
 from pathlib import Path
 
@@ -9,21 +5,24 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load private local settings from .env (the file is ignored by Git).
 load_dotenv(BASE_DIR / ".env")
 
-# SECURITY WARNING: keep this secret in production (use an env var).
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
     "django-insecure-change-this-before-deploying",
 )
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes", "on"}
+DEBUG = os.getenv(
+    "DJANGO_DEBUG",
+    "True"
+).lower() in {"1", "true", "yes", "on"}
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    for host in os.getenv(
+        "DJANGO_ALLOWED_HOSTS",
+        "localhost,127.0.0.1"
+    ).split(",")
     if host.strip()
 ]
 
@@ -71,7 +70,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "bloodnet_project.wsgi.application"
 ASGI_APPLICATION = "bloodnet_project.asgi.application"
 
-# Database
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -80,42 +78,64 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },
 ]
 
-# Custom user model (email-based login, verification fields — see accounts/models.py)
 AUTH_USER_MODEL = "accounts.User"
 
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "core:index"
 LOGOUT_REDIRECT_URL = "core:index"
-PASSWORD_RESET_TIMEOUT = int(os.getenv("PASSWORD_RESET_TIMEOUT", "3600"))
+
+PASSWORD_RESET_TIMEOUT = int(
+    os.getenv("PASSWORD_RESET_TIMEOUT", "3600")
+)
 
 LANGUAGE_CODE = "en-us"
+
 TIME_ZONE = "Asia/Karachi"
+
 USE_I18N = True
+
 USE_TZ = True
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 11eb135 (Initial commit of Blood Request Module)
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# -----------------------------------------------------------------------------
-# Email / OTP delivery
-# -----------------------------------------------------------------------------
-# Add EMAIL_HOST_USER and EMAIL_HOST_PASSWORD to .env to activate real Gmail
-# delivery. Without credentials, Django safely falls back to the console
-# backend so the project still runs during development.
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "").strip()
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "").replace(" ", "").strip()
+EMAIL_HOST_USER = os.getenv(
+    "EMAIL_HOST_USER",
+    ""
+).strip()
+
+EMAIL_HOST_PASSWORD = os.getenv(
+    "EMAIL_HOST_PASSWORD",
+    ""
+).replace(" ", "").strip()
 
 EMAIL_BACKEND = os.getenv(
     "EMAIL_BACKEND",
@@ -125,24 +145,53 @@ EMAIL_BACKEND = os.getenv(
         else "django.core.mail.backends.console.EmailBackend"
     ),
 )
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() in {
+
+EMAIL_HOST = os.getenv(
+    "EMAIL_HOST",
+    "smtp.gmail.com"
+)
+
+EMAIL_PORT = int(
+    os.getenv(
+        "EMAIL_PORT",
+        "587"
+    )
+)
+
+EMAIL_USE_TLS = os.getenv(
+    "EMAIL_USE_TLS",
+    "True"
+).lower() in {
     "1",
     "true",
     "yes",
     "on",
 }
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False").lower() in {
+
+EMAIL_USE_SSL = os.getenv(
+    "EMAIL_USE_SSL",
+    "False"
+).lower() in {
     "1",
     "true",
     "yes",
     "on",
 }
-EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
+
+EMAIL_TIMEOUT = int(
+    os.getenv(
+        "EMAIL_TIMEOUT",
+        "20"
+    )
+)
 
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
-    f"BloodNet <{EMAIL_HOST_USER}>" if EMAIL_HOST_USER else "BloodNet <noreply@bloodnet.local>",
+    (
+        f"BloodNet <{EMAIL_HOST_USER}>"
+        if EMAIL_HOST_USER
+        else "BloodNet <noreply@bloodnet.local>"
+    ),
 )
+
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
