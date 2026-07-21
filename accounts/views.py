@@ -61,25 +61,23 @@ def signup_view(request):
             user = form.save(commit=False)
             user.full_name = form.cleaned_data["full_name"]
             user.role = form.cleaned_data["role"]
-            user.is_verified = False
+
+            # TEMPORARY DEVELOPMENT CONFIGURATION:
+            # Email OTP verification is temporarily bypassed during active module development
+            # so SMTP email setup is not required.
+            # To re-enable OTP for production:
+            # 1. Set user.is_verified = False
+            # 2. Re-enable send_otp_email(user)
+            # 3. Redirect to 'accounts:verify_account'
+            user.is_verified = True
             user.generate_otp()
             user.save()
 
-            request.session["verification_user_id"] = user.id
-
-            if send_otp_email(user):
-                messages.success(
-                    request,
-                    "We sent a 6-digit verification code to your email.",
-                )
-            else:
-                messages.error(
-                    request,
-                    "Your account was created, but the email could not be sent. "
-                    "Check the SMTP settings and then select Resend Code.",
-                )
-
-            return redirect("accounts:verify_account")
+            messages.success(
+                request,
+                "Account created successfully! You can now log in.",
+            )
+            return redirect("accounts:login")
     else:
         form = SignupForm()
 
@@ -163,25 +161,24 @@ def login_view(request):
 
             if user is None:
                 error = "Invalid email or password."
-            elif not user.is_verified:
-                user.generate_otp()
-                user.save(update_fields=["verification_otp"])
-                request.session["verification_user_id"] = user.id
-
-                if send_otp_email(user):
-                    messages.info(
-                        request,
-                        "Please verify your account first. We sent you a new code.",
-                    )
-                else:
-                    messages.error(
-                        request,
-                        "Your account is not verified and the email could not be sent. "
-                        "Check SMTP settings, then use Resend Code.",
-                    )
-                return redirect("accounts:verify_account")
             else:
+                # TEMPORARY DEVELOPMENT CONFIGURATION:
+                # Auto-verify users during dev phase if not yet verified.
+                if not user.is_verified:
+                    user.is_verified = True
+                    user.save(update_fields=["is_verified"])
+
                 login(request, user)
+                if user.role in ["recipient", "patient"]:
+                    recipient_profile = getattr(user, "recipient_profile", None)
+                    if recipient_profile and recipient_profile.is_completed:
+                        return redirect("recipient:dashboard")
+                    return redirect("recipient:profile")
+                elif user.role == "donor":
+                    donor_profile = getattr(user, "donor_profile", None)
+                    if donor_profile and donor_profile.is_completed:
+                        return redirect("donor:dashboard")
+                    return redirect("donor:profile")
                 return redirect("core:index")
     else:
         form = LoginForm()

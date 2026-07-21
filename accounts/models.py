@@ -19,6 +19,7 @@ class User(AbstractUser):
 
     ROLE_CHOICES = (
         ("donor", "Donor"),
+        ("recipient", "Recipient"),
         ("patient", "Patient"),
         ("hospital", "Hospital"),
     )

@@ -1,0 +1,267 @@
+{% extends "donor/base_donor.html" %}
+{% load static %}
+
+{% block title %}Donor Dashboard — BloodNet{% endblock %}
+{% block page_title %}Donor Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+  .dash-wrap { display: flex; flex-direction: column; gap: 28px; }
+
+  .greeting-banner { margin-bottom: 4px; }
+  .greeting-title { font-size: 1.8rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+  .greeting-sub { font-size: 0.95rem; font-weight: 600; color: var(--text-sub); }
+
+  /* Availability Switch Banner */
+  .availability-banner {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(43, 47, 56, 0.03);
+  }
+  .avail-info { display: flex; align-items: center; gap: 16px; }
+  .avail-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: #e6f6ee; color: #1c8a55;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .avail-icon.off { background: #f1f5f9; color: #64748b; }
+  .avail-title { font-weight: 800; font-size: 1.1rem; color: var(--text-main); }
+  .avail-status-text { font-size: 0.85rem; font-weight: 700; color: #1c8a55; }
+  .avail-status-text.off { color: #64748b; }
+
+  .btn-toggle-avail {
+    padding: 10px 20px; border-radius: 12px; border: 1.5px solid var(--border-color);
+    background: #fff; font-weight: 700; font-size: 0.88rem; cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-toggle-avail:hover { border-color: var(--primary-red); color: var(--primary-red); }
+
+  /* 4 Stats Cards */
+  .dash-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .dash-stat-card {
+    background: #ffffff; border: 1px solid var(--border-color);
+    border-radius: 24px; padding: 24px 20px; text-align: center;
+    box-shadow: 0 10px 30px rgba(43, 47, 56, 0.03);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .dash-stat-val { font-size: 2.2rem; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+  .dash-stat-val.red { color: var(--primary-red); }
+  .dash-stat-val.dark { color: var(--text-main); }
+  .dash-stat-lbl { font-size: 0.78rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Grid 2 column */
+  .grid-two-col { display: grid; grid-template-columns: 1.8fr 1fr; gap: 28px; }
+  .col-left { display: flex; flex-direction: column; gap: 28px; }
+  .col-right { display: flex; flex-direction: column; gap: 28px; }
+
+  .dash-card {
+    background: #ffffff; border: 1px solid var(--border-color);
+    border-radius: 24px; padding: 28px; box-shadow: 0 10px 30px rgba(43, 47, 56, 0.03);
+  }
+  .dash-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .dash-card-title { font-size: 1.15rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+  .dash-card-title svg { color: var(--primary-red); }
+
+  /* Available Request Cards */
+  .requests-feed { display: flex; flex-direction: column; gap: 16px; }
+  .req-item-card {
+    background: #faf8f5; border: 1px solid var(--border-color);
+    border-radius: 20px; padding: 20px; display: flex;
+    flex-direction: column; gap: 14px; transition: transform 0.2s ease;
+  }
+  .req-item-card:hover { transform: translateY(-2px); border-color: rgba(226, 58, 46, 0.3); }
+
+  .req-header { display: flex; align-items: center; justify-content: space-between; }
+  .req-blood-badge {
+    background: var(--soft-pink); color: var(--primary-red-dark);
+    font-size: 1.1rem; font-weight: 800; padding: 6px 14px; border-radius: 12px;
+  }
+  .urgency-badge {
+    font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase;
+  }
+  .urgency-badge.emergency { background: #fee2e2; color: #991b1b; }
+  .urgency-badge.urgent { background: #fef3c7; color: #92400e; }
+
+  .req-details { display: flex; flex-direction: column; gap: 4px; }
+  .req-hospital { font-weight: 800; font-size: 1rem; color: var(--text-main); }
+  .req-patient { font-size: 0.88rem; font-weight: 600; color: var(--text-sub); }
+
+  .req-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border-color); }
+  .req-meta { font-size: 0.82rem; font-weight: 600; color: var(--text-sub); }
+
+  .btn-accept-request {
+    padding: 10px 22px; border-radius: 10px; border: none;
+    background: linear-gradient(135deg, #f5686e 0%, var(--primary-red) 100%);
+    color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer;
+    box-shadow: 0 6px 16px rgba(226, 58, 46, 0.25); transition: all 0.2s ease;
+  }
+  .btn-accept-request:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(226, 58, 46, 0.35); }
+
+  /* Accepted Requests Card */
+  .accepted-item-card {
+    background: #e6f6ee; border: 1px solid #bbf7d0;
+    border-radius: 18px; padding: 18px; display: flex;
+    flex-direction: column; gap: 10px; margin-bottom: 12px;
+  }
+  .accepted-title { font-weight: 800; font-size: 0.95rem; color: #166534; display: flex; align-items: center; gap: 8px; }
+
+  @media (max-width: 992px) {
+    .dash-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-two-col { grid-template-columns: 1fr; }
+    .availability-banner { flex-direction: column; align-items: flex-start; gap: 16px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dash-wrap">
+
+  <!-- Greeting Banner -->
+  <div class="greeting-banner">
+    <h1 class="greeting-title">Hi, {{ profile.full_name|default:request.user.email }}! 👋</h1>
+    <p class="greeting-sub">Ready to save lives today? Your donation brings hope to families in need.</p>
+  </div>
+
+  <!-- Availability Switch Banner -->
+  <div class="availability-banner">
+    <div class="avail-info">
+      <div class="avail-icon {% if not profile.is_available %}off{% endif %}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div>
+        <div class="avail-title">Donation Status</div>
+        <div class="avail-status-text {% if not profile.is_available %}off{% endif %}">
+          {% if profile.is_available %}● AVAILABLE TO DONATE{% else %}○ CURRENTLY UNAVAILABLE{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <form method="post" action="{% url 'donor:toggle_availability' %}">
+      {% csrf_token %}
+      <button type="submit" class="btn-toggle-avail">
+        {% if profile.is_available %}Switch to Unavailable{% else %}Switch to Available{% endif %}
+      </button>
+    </form>
+  </div>
+
+  <!-- 4 Stats Cards -->
+  <div class="dash-stats-grid">
+    <div class="dash-stat-card">
+      <div class="dash-stat-val red">{{ profile.blood_group|default:"A+" }}</div>
+      <div class="dash-stat-lbl">Blood Group</div>
+    </div>
+
+    <div class="dash-stat-card">
+      <div class="dash-stat-val dark">{{ profile.total_donations }}</div>
+      <div class="dash-stat-lbl">Total Donations</div>
+    </div>
+
+    <div class="dash-stat-card">
+      <div class="dash-stat-val dark">{{ profile.lives_saved }}</div>
+      <div class="dash-stat-lbl">Lives Saved</div>
+    </div>
+
+    <div class="dash-stat-card">
+      <div class="dash-stat-val dark">{{ accepted_requests.count }}</div>
+      <div class="dash-stat-lbl">Accepted Matches</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid-two-col">
+
+    <!-- Left Column: Urgent Requests & Accept Action -->
+    <div class="col-left">
+
+      <div class="dash-card" id="available-requests">
+        <div class="dash-card-header">
+          <div class="dash-card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span>Urgent Recipient Blood Requests</span>
+          </div>
+        </div>
+
+        <div class="requests-feed">
+          {% for req in available_requests %}
+          <div class="req-item-card">
+            <div class="req-header">
+              <span class="req-blood-badge">{{ req.blood_group }} Needed</span>
+              <span class="urgency-badge {{ req.urgency_level }}">{{ req.urgency_level }}</span>
+            </div>
+
+            <div class="req-details">
+              <div class="req-hospital">{{ req.hospital_name }}</div>
+              <div class="req-patient">Patient: {{ req.patient_name }} • {{ req.units_needed }} Units Urgent</div>
+            </div>
+
+            <div class="req-footer">
+              <div class="req-meta">📍 {{ req.city }} ({{ req.distance }})</div>
+
+              <form method="post" action="{% url 'donor:accept_request' req.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-accept-request">Accept Request</button>
+              </form>
+            </div>
+          </div>
+          {% empty %}
+          <div style="text-align:center; padding:30px; color:var(--text-sub);">
+            No urgent blood requests currently pending.
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: My Accepted Requests & Guidance -->
+    <div class="col-right">
+
+      <div class="dash-card" id="accepted-requests">
+        <div class="dash-card-header">
+          <div class="dash-card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>My Accepted Donations</span>
+          </div>
+        </div>
+
+        {% for acc in accepted_requests %}
+        <div class="accepted-item-card">
+          <div class="accepted-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Accepted — {{ acc.blood_group }} for {{ acc.patient_name }}</span>
+          </div>
+          <div style="font-size:0.85rem; color:#14532d; font-weight:600;">
+            Hospital: <strong>{{ acc.hospital_name }}</strong><br>
+            Accepted: {{ acc.accepted_at|date:"M d, g:i a" }}
+          </div>
+        </div>
+        {% empty %}
+        <div style="text-align:center; padding:20px; color:var(--text-sub); font-size:0.88rem;">
+          You haven't accepted any blood requests yet. Click <strong>Accept Request</strong> on any urgent request to help save a life!
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title">Donor Tips & Guidelines</div>
+        </div>
+        <ul style="font-size:0.85rem; color:var(--text-sub); line-height:1.6; padding-left:18px;">
+          <li>Drink plenty of water before your donation.</li>
+          <li>Eat a healthy meal avoiding fatty foods before donating.</li>
+          <li>Bring a valid ID document to the hospital.</li>
+          <li>Rest for 10-15 minutes post-donation.</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
