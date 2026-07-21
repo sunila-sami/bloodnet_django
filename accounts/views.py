@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils import timezone
 
 from .forms import LoginForm, SignupForm
 from .models import User
@@ -62,22 +64,18 @@ def signup_view(request):
             user.full_name = form.cleaned_data["full_name"]
             user.role = form.cleaned_data["role"]
 
-            # TEMPORARY DEVELOPMENT CONFIGURATION:
-            # Email OTP verification is temporarily bypassed during active module development
-            # so SMTP email setup is not required.
-            # To re-enable OTP for production:
-            # 1. Set user.is_verified = False
-            # 2. Re-enable send_otp_email(user)
-            # 3. Redirect to 'accounts:verify_account'
-            user.is_verified = True
+            user.is_verified = False
             user.generate_otp()
             user.save()
 
+            request.session["verification_user_id"] = user.id
+            send_otp_email(user)
+
             messages.success(
                 request,
-                "Account created successfully! You can now log in.",
+                "Account created successfully! Please verify your email address.",
             )
-            return redirect("accounts:login")
+            return redirect("accounts:verify_account")
     else:
         form = SignupForm()
 
@@ -102,16 +100,37 @@ def verify_account(request):
             request.POST.get(f"otp{i}", "").strip() for i in range(1, 7)
         )
 
-        if len(entered_otp) == 6 and entered_otp == user.verification_otp:
+        # Check expiration (10 minutes = 600 seconds)
+        if user.otp_created_at and (timezone.now() - user.otp_created_at).total_seconds() > 600:
+            error = "The verification code has expired. Please request a new one."
+            user.verification_otp = None
+            user.save(update_fields=["verification_otp"])
+        elif len(entered_otp) == 6 and entered_otp == user.verification_otp:
             user.is_verified = True
             user.verification_otp = None
-            user.save(update_fields=["is_verified", "verification_otp"])
+            user.otp_created_at = None
+            user.save(update_fields=["is_verified", "verification_otp", "otp_created_at"])
 
             request.session.pop("verification_user_id", None)
-            messages.success(request, "Your account is verified — please log in.")
-            return redirect("accounts:login")
+            
+            # Auto-login the user upon verification
+            login(request, user)
+            messages.success(request, "Your account is verified successfully!")
 
-        error = "Invalid verification code. Please try again."
+            # Role-based redirection
+            if user.role in ["recipient", "patient"]:
+                recipient_profile = getattr(user, "recipient_profile", None)
+                if recipient_profile and recipient_profile.is_completed:
+                    return redirect("recipient:dashboard")
+                return redirect("recipient:profile")
+            elif user.role == "donor":
+                donor_profile = getattr(user, "donor_profile", None)
+                if donor_profile and donor_profile.is_completed:
+                    return redirect("donor:dashboard")
+                return redirect("donor:profile")
+            return redirect("core:index")
+        else:
+            error = "Invalid verification code. Please try again."
 
     return render(
         request,
@@ -131,8 +150,14 @@ def resend_otp(request):
         request.session.pop("verification_user_id", None)
         return redirect("accounts:signup")
 
+    # Check cooldown (60 seconds)
+    if user.otp_sent_at and (timezone.now() - user.otp_sent_at).total_seconds() < 60:
+        time_left = int(60 - (timezone.now() - user.otp_sent_at).total_seconds())
+        messages.error(request, f"Please wait {time_left} seconds before requesting a new OTP.")
+        return redirect("accounts:verify_account")
+
     user.generate_otp()
-    user.save(update_fields=["verification_otp"])
+    user.save(update_fields=["verification_otp", "otp_created_at", "otp_sent_at"])
 
     if send_otp_email(user):
         messages.success(request, "A new verification code has been sent.")
@@ -161,13 +186,11 @@ def login_view(request):
 
             if user is None:
                 error = "Invalid email or password."
+            elif not user.is_verified:
+                request.session["verification_user_id"] = user.id
+                verify_url = reverse("accounts:verify_account")
+                error = f'Please verify your email address before logging in. <a href="{verify_url}" style="text-decoration: underline; color: inherit; font-weight: bold;">Verify now</a>'
             else:
-                # TEMPORARY DEVELOPMENT CONFIGURATION:
-                # Auto-verify users during dev phase if not yet verified.
-                if not user.is_verified:
-                    user.is_verified = True
-                    user.save(update_fields=["is_verified"])
-
                 login(request, user)
                 if user.role in ["recipient", "patient"]:
                     recipient_profile = getattr(user, "recipient_profile", None)

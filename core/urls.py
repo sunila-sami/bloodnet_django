@@ -11,6 +11,12 @@ urlpatterns = [
     ),
 
     path(
+        "become-donor/",
+        views.become_donor,
+        name="become_donor"
+    ),
+
+    path(
         "request-blood/",
         views.blood_request,
         name="blood_request"

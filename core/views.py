@@ -4,10 +4,33 @@ from django.contrib import messages
 
 from .forms import BloodRequestForm
 from .models import BloodRequest
+from donor.models import Donor
 
 
 def index(request):
     return render(request, "core/index.html")
+
+
+def become_donor(request):
+    if not request.user.is_authenticated:
+        return redirect("accounts:signup")
+
+    profile, created = Donor.objects.get_or_create(
+        user=request.user,
+        defaults={
+            "full_name": request.user.full_name or request.user.email,
+        },
+    )
+
+    if request.user.role != "donor":
+        request.user.role = "donor"
+        request.user.save(update_fields=["role"])
+
+    if profile.is_completed:
+        return redirect("donor:dashboard")
+    
+    return redirect("donor:profile")
+
 
 
 @login_required

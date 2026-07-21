@@ -3,19 +3,23 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
+
 
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
     "django-insecure-change-this-before-deploying",
 )
 
+
 DEBUG = os.getenv(
     "DJANGO_DEBUG",
     "True"
 ).lower() in {"1", "true", "yes", "on"}
+
 
 ALLOWED_HOSTS = [
     host.strip()
@@ -26,6 +30,7 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -33,11 +38,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # BloodNet Apps
     "accounts",
     "core",
     "recipient",
     "donor",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -49,7 +57,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
 ROOT_URLCONF = "bloodnet_project.urls"
+
 
 TEMPLATES = [
     {
@@ -67,8 +77,10 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = "bloodnet_project.wsgi.application"
 ASGI_APPLICATION = "bloodnet_project.asgi.application"
+
 
 DATABASES = {
     "default": {
@@ -76,6 +88,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -92,15 +105,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 AUTH_USER_MODEL = "accounts.User"
+
 
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "core:index"
 LOGOUT_REDIRECT_URL = "core:index"
 
+
 PASSWORD_RESET_TIMEOUT = int(
     os.getenv("PASSWORD_RESET_TIMEOUT", "3600")
 )
+
 
 LANGUAGE_CODE = "en-us"
 
@@ -110,6 +127,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
@@ -117,21 +135,22 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 EMAIL_HOST_USER = os.getenv(
     "EMAIL_HOST_USER",
     ""
 ).strip()
 
+
 EMAIL_HOST_PASSWORD = os.getenv(
     "EMAIL_HOST_PASSWORD",
     ""
 ).replace(" ", "").strip()
+
 
 EMAIL_BACKEND = os.getenv(
     "EMAIL_BACKEND",
@@ -142,10 +161,12 @@ EMAIL_BACKEND = os.getenv(
     ),
 )
 
+
 EMAIL_HOST = os.getenv(
     "EMAIL_HOST",
     "smtp.gmail.com"
 )
+
 
 EMAIL_PORT = int(
     os.getenv(
@@ -153,6 +174,7 @@ EMAIL_PORT = int(
         "587"
     )
 )
+
 
 EMAIL_USE_TLS = os.getenv(
     "EMAIL_USE_TLS",
@@ -164,6 +186,7 @@ EMAIL_USE_TLS = os.getenv(
     "on",
 }
 
+
 EMAIL_USE_SSL = os.getenv(
     "EMAIL_USE_SSL",
     "False"
@@ -174,12 +197,14 @@ EMAIL_USE_SSL = os.getenv(
     "on",
 }
 
+
 EMAIL_TIMEOUT = int(
     os.getenv(
         "EMAIL_TIMEOUT",
         "20"
     )
 )
+
 
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
@@ -189,5 +214,6 @@ DEFAULT_FROM_EMAIL = os.getenv(
         else "BloodNet <noreply@bloodnet.local>"
     ),
 )
+
 
 SERVER_EMAIL = DEFAULT_FROM_EMAIL

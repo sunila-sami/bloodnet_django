@@ -131,5 +131,5 @@ def recipient_dashboard_view(request):
 
 @login_required
 def request_blood_placeholder_view(request):
-    profile = getattr(request.user, "recipient_profile", None)
-    return render(request, "recipient/request_blood_placeholder.html", {"profile": profile})
+    return redirect("core:blood_request")
+

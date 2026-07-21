@@ -2,6 +2,7 @@ import random
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 from .managers import UserManager
 
@@ -57,6 +58,8 @@ class User(AbstractUser):
     # ---- Stage 1: email/phone OTP verification ----
     is_verified = models.BooleanField(default=False)
     verification_otp = models.CharField(max_length=6, blank=True, null=True)
+    otp_created_at = models.DateTimeField(blank=True, null=True)
+    otp_sent_at = models.DateTimeField(blank=True, null=True)
 
     # ---- Stage 2: donor identity verification ----
     identity_status = models.CharField(
@@ -82,6 +85,8 @@ class User(AbstractUser):
     def generate_otp(self):
         """Generate and store a new 6-digit OTP on this user."""
         self.verification_otp = str(random.randint(100000, 999999))
+        self.otp_created_at = timezone.now()
+        self.otp_sent_at = timezone.now()
         return self.verification_otp
 
     @property
